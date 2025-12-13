@@ -2,7 +2,6 @@
 
 namespace common\models;
 
-use DateInterval;
 use DateTime;
 use Yii;
 use yii\db\ActiveRecord;
@@ -17,6 +16,8 @@ use yii\db\ActiveRecord;
  *
  * @property Film $film
  * @property string $title
+ * @property string $rating
+ * @property string $photo
  */
 class Seance extends ActiveRecord
 {
@@ -55,7 +56,9 @@ class Seance extends ActiveRecord
             'film_id' => 'Фильм',
             'datetime' => 'Дата и время',
             'price' => 'Стоимость (руб)',
-            'film' => 'Фильм'
+            'film' => 'Фильм',
+            'rating' => 'Возрастные ограничения',
+            'photo' => 'Фото'
         ];
     }
 
@@ -67,6 +70,26 @@ class Seance extends ActiveRecord
     public function getFilm()
     {
         return $this->hasOne(Film::class, ['id' => 'film_id']);
+    }
+
+    /**
+     * Возвращает возрастные ограничения
+     *
+     * @return string
+     */
+    public function getRating()
+    {
+        return $this->film->rating;
+    }
+
+    /**
+     * Возвращает адрес фотографии фильма
+     *
+     * @return string
+     */
+    public function getPhoto()
+    {
+        return $this->film->photoUrl;
     }
 
     /**

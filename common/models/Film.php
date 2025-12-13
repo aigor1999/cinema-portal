@@ -115,10 +115,17 @@ class Film extends ActiveRecord
      */
     public function afterSave($insert, $changedAttributes)
     {
+        //проверка созддания папки upload
         $uploadDir = Yii::getAlias('@backend') . '/web/upload/film';
         if (!is_dir($uploadDir)) {
             FileHelper::createDirectory($uploadDir);
-        } 
+        }
+        //проверка символической ссылки во frontend
+        $frontendDir = Yii::getAlias('@frontend') . '/web/upload';
+        if (!is_link($frontendDir)) {
+            $realPath = Yii::getAlias('@backend') . '/web/upload';
+            symlink($realPath, $frontendDir);
+        }
         if (!$insert && array_key_exists('photo_type', $changedAttributes)) {
             //удаление предыдущей картинки, если другой формат
             $oldPhotoType = $changedAttributes['photo_type'];

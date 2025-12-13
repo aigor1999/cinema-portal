@@ -2,7 +2,9 @@
 
 namespace frontend\controllers;
 
+use common\Models\Seance;
 use Yii;
+use yii\data\ActiveDataProvider;
 use yii\web\Controller;
 use yii\filters\VerbFilter;
 
@@ -17,22 +19,6 @@ class SiteController extends Controller
     public function behaviors()
     {
         return [
-            /*'access' => [
-                'class' => AccessControl::class,
-                'only' => ['logout', 'signup'],
-                'rules' => [
-                    [
-                        'actions' => ['signup'],
-                        'allow' => true,
-                        'roles' => ['?'],
-                    ],
-                    [
-                        'actions' => ['logout'],
-                        'allow' => true,
-                        'roles' => ['@'],
-                    ],
-                ],
-            ],*/
             'verbs' => [
                 'class' => VerbFilter::class,
                 'actions' => [
@@ -51,10 +37,6 @@ class SiteController extends Controller
             'error' => [
                 'class' => \yii\web\ErrorAction::class,
             ],
-            /*'captcha' => [
-                'class' => \yii\captcha\CaptchaAction::class,
-                'fixedVerifyCode' => YII_ENV_TEST ? 'testme' : null,
-            ],*/
         ];
     }
 
@@ -65,6 +47,18 @@ class SiteController extends Controller
      */
     public function actionIndex()
     {
-        return $this->render('index');
+        $dataProvider = new ActiveDataProvider([
+            'query' => Seance::find()->orderBy(['datetime' => SORT_DESC]),
+            /*
+            'pagination' => [
+                'pageSize' => 50
+            ],
+            */
+            'sort' => false,
+        ]);
+
+        return $this->render('index', [
+            'dataProvider' => $dataProvider,
+        ]);
     }
 }
