@@ -1,0 +1,12 @@
+<Project Sdk="Devsense.Php.Sdk">
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>46258252-0ded-360e-e0e7-8a09d9fc6974</ProjectGuid>
+  </PropertyGroup>
+  <PropertyGroup>
+    <EnvName>PHPDev</EnvName>
+  </PropertyGroup>
+  <ItemGroup>
+    <Folder Include="frontend\models\" />
+    <Folder Include="frontend\tests\unit\models\" />
+  </ItemGroup>
+</Project>
