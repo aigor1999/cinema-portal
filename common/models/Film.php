@@ -96,7 +96,11 @@ class Film extends ActiveRecord
      */
     public function getPhotoUrl()
     {
-        return Yii::$app->urlManager->createUrl("upload/film/$this->id.$this->photo_type");
+        if (basename(Yii::getAlias('@app')) == 'backend')
+            return Yii::$app->urlManager->createUrl("upload/film/$this->id.$this->photo_type");
+        else
+            //относительный URL для обращения из клиентской части через BackendUploadAsset
+            return "film/$this->id.$this->photo_type";
     }
 
     /**
@@ -121,11 +125,11 @@ class Film extends ActiveRecord
             FileHelper::createDirectory($uploadDir);
         }
         //проверка символической ссылки во frontend
-        $frontendDir = Yii::getAlias('@frontend') . '/web/upload';
+        /*$frontendDir = Yii::getAlias('@frontend') . '/web/upload';
         if (!is_link($frontendDir)) {
             $realPath = Yii::getAlias('@backend') . '/web/upload';
             symlink($realPath, $frontendDir);
-        }
+        }*/
         if (!$insert && array_key_exists('photo_type', $changedAttributes)) {
             //удаление предыдущей картинки, если другой формат
             $oldPhotoType = $changedAttributes['photo_type'];

@@ -1,11 +1,14 @@
 <?php
 
+use frontend\assets\BackendUploadAsset;
 use yii\grid\GridView;
 use yii\helpers\Html;
 
 /** @var yii\web\View $this */
 
 $this->title = 'Кинотеатр Блокбастер';
+$backendUpload = BackendUploadAsset::register($this);
+
 ?>
 <div class="site-index">
     <div class="mb-4 bg-transparent rounded-3">
@@ -26,8 +29,8 @@ $this->title = 'Кинотеатр Блокбастер';
             [
                 'attribute' => 'photo',
                 'format' => 'html',
-                'value' => function ($model) {
-                    return Html::img($model->photo, [
+                'value' => function ($model) use($backendUpload) {
+                    return Html::img("$backendUpload->baseUrl/$model->photo", [
                         'style' => 'width:200px;'
                     ]);
                 }
