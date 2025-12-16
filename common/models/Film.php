@@ -119,7 +119,7 @@ class Film extends ActiveRecord
      */
     public function afterSave($insert, $changedAttributes)
     {
-        //проверка созддания папки upload
+        //проверка создания папки upload
         $uploadDir = Yii::getAlias('@backend') . '/web/upload/film';
         if (!is_dir($uploadDir)) {
             FileHelper::createDirectory($uploadDir);

@@ -1,6 +1,7 @@
 <?php
 
 namespace frontend\assets;
+use yii\helpers\FileHelper;
 use yii\web\AssetBundle;
 
 /**
@@ -10,4 +11,13 @@ use yii\web\AssetBundle;
 class BackendUploadAsset extends AssetBundle
 {
     public $sourcePath = '@backend/web/upload';
+
+    public function init() {
+        parent::init();
+        //проверка создания папки upload
+        $uploadDir = $this->sourcePath;
+        if (!is_dir($uploadDir)) {
+            FileHelper::createDirectory($uploadDir);
+        }
+    }
 }
