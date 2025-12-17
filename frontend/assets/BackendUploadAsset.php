@@ -10,8 +10,14 @@ use yii\web\AssetBundle;
  */
 class BackendUploadAsset extends AssetBundle
 {
-    public $sourcePath = '@backend/web/upload';
+    /**
+     * {@inheritdoc}
+     */
+    public $sourcePath = '@backend/web/upload/film';
 
+    /**
+     * {@inheritdoc}
+     */
     public function init() {
         parent::init();
         //проверка создания папки upload

@@ -99,8 +99,8 @@ class Film extends ActiveRecord
         if (basename(Yii::getAlias('@app')) == 'backend')
             return Yii::$app->urlManager->createUrl("upload/film/$this->id.$this->photo_type");
         else
-            //относительный URL для обращения из клиентской части через BackendUploadAsset
-            return "film/$this->id.$this->photo_type";
+            //имя файла для обращения из клиентской части через BackendUploadAsset
+            return "$this->id.$this->photo_type";
     }
 
     /**
