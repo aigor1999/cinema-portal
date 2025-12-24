@@ -23,6 +23,8 @@ class Seance extends ActiveRecord
 {
     const SEANCE_GAP = 1800; //минимальный промежуток между сеансами
 
+    const DATABASE_TIME_FORMAT = 'php:Y-m-d H:i:s';
+
     /**
      * {@inheritdoc}
      */
@@ -99,13 +101,13 @@ class Seance extends ActiveRecord
      */
     public function getTitle()
     {
-        return 'Сеанс ' . Yii::$app->formatter->asDatetime($this->datetime, Yii::$app->formatter->datetimeFormat);
+        return 'Сеанс ' . Yii::$app->formatter->asDatetime($this->datetime);
     }
 
     //проверяет, что нет сеансов, расходящихся с данным менее, чем на полчаса
     public function validateDateTime($attribute, $params)
     {
-        $value = $this->datetime;
+        $value = Yii::$app->formatter->asDatetime($this->datetime, static::DATABASE_TIME_FORMAT);
         $start = new DateTime($value)->getTimestamp();
         //поиск предыдущего сеанса
         $prev = static::find()->where(['<=', 'datetime', $value])->orderBy('datetime DESC')->one();
@@ -114,9 +116,9 @@ class Seance extends ActiveRecord
             $prevLength = $prev->film->length * 60;
             $diff = $start - $prevStart;
             if ($diff - $prevLength < static::SEANCE_GAP) {
-                $prevStartFormatted = Yii::$app->formatter->asDatetime($prevStart, Yii::$app->formatter->datetimeFormat);
+                $prevStartFormatted = Yii::$app->formatter->asDatetime($prevStart);
                 $prevEnd = $prevStart + $prevLength;
-                $prevEndFormatted = Yii::$app->formatter->asDatetime($prevEnd, Yii::$app->formatter->datetimeFormat);
+                $prevEndFormatted = Yii::$app->formatter->asDatetime($prevEnd);
                 $this->addError('datetime', 'Сеанс должен начинаться минимум через полчаса после предыдующего, начинающегося в ' .
                    $prevStartFormatted . ' и завершающегося в ' . $prevEndFormatted);
                 return;
@@ -128,12 +130,15 @@ class Seance extends ActiveRecord
             $nextStart = new DateTime($next->datetime)->getTimestamp();
             $diff = $nextStart - $start;
             if ($diff - $this->film->length * 60 < static::SEANCE_GAP) {
-                $nextStartFormatted = Yii::$app->formatter->asDatetime($nextStart, Yii::$app->formatter->datetimeFormat);
+                $nextStartFormatted = Yii::$app->formatter->asDatetime($nextStart);
                 $nextEnd = $nextStart + $next->film->length * 60;
-                $nextEndFormatted = Yii::$app->formatter->asDatetime($nextEnd, Yii::$app->formatter->datetimeFormat);
+                $nextEndFormatted = Yii::$app->formatter->asDatetime($nextEnd);
                 $this->addError('datetime', 'Сеанс должен заканчиваться минимум за полчаса до последующего, начинающегося в ' .
                     $nextStartFormatted . ' и завершающегося в ' . $nextEndFormatted);
+                return;
             }
         }
+        //приведение даты к формату для БД
+        $this->datetime = $value;
     }
 }

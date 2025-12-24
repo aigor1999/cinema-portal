@@ -19,7 +19,7 @@ use yii\widgets\ActiveForm;
 
     <?= $form->field($model, 'datetime', [
         'inputOptions' => ['value' => !$model->isNewRecord ? 
-            Yii::$app->formatter->asDatetime($model->datetime, Yii::$app->formatter->datetimeFormat) : '' ]
+            Yii::$app->formatter->asDatetime($model->datetime) : '' ]
     ])->widget(DateTimePicker::className(), [
         'type' => DateTimePicker::TYPE_INPUT,
         'pluginOptions' => [
