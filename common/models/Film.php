@@ -106,7 +106,6 @@ class Film extends ActiveRecord
     /**
      * Обрабатывает новую фотографию
      *
-     * @return string
      */
     public function processUploadData() {
         $this->upload = UploadedFile::getInstance($this, 'upload');

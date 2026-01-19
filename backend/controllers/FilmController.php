@@ -3,7 +3,8 @@
 namespace backend\controllers;
 
 use common\Models\Film;
-use yii\data\ActiveDataProvider;
+use common\models\FilmSearch;
+use Yii;
 use yii\filters\AccessControl;
 use yii\filters\VerbFilter;
 use yii\web\Controller;
@@ -48,22 +49,14 @@ class FilmController extends Controller
      */
     public function actionIndex()
     {
-        $dataProvider = new ActiveDataProvider([
-            'query' => Film::find(),
-            /*
-            'pagination' => [
-                'pageSize' => 50
-            ],
-            'sort' => [
-                'defaultOrder' => [
-                    'id' => SORT_DESC,
-                ]
-            ],
-            */
-        ]);
+
+        $searchModel = new FilmSearch();
+        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+        
 
         return $this->render('index', [
             'dataProvider' => $dataProvider,
+            'searchModel' => $searchModel
         ]);
     }
 

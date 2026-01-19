@@ -1,10 +1,13 @@
 <?php
 
 use frontend\assets\BackendUploadAsset;
+use kartik\datetime\DateTimePicker;
 use yii\grid\GridView;
 use yii\helpers\Html;
 
 /** @var yii\web\View $this */
+/** @var yii\data\ActiveDataProvider $dataProvider */
+/** @var common\Models\Seance $searchModel */
 
 $this->title = 'Кинотеатр Блокбастер';
 $backendUpload = BackendUploadAsset::register($this);
@@ -20,11 +23,16 @@ $backendUpload = BackendUploadAsset::register($this);
 
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
+        'filterModel' => $searchModel,
         'columns' => [
             ['class' => 'yii\grid\SerialColumn'],
 
             //'id',
-            'film',            
+            //'film',    
+            [
+                'attribute' => 'film',
+                'filter' => Html::activeTextInput($searchModel, 'name')
+            ],
             //'photo',    
             [
                 'attribute' => 'photo',
@@ -35,9 +43,32 @@ $backendUpload = BackendUploadAsset::register($this);
                     ]);
                 }
             ],
-            'datetime:datetime',
-            'price',
-            'rating'
+            [
+                'attribute' => 'datetime',
+                'format' => 'datetime',
+                'filter' => DateTimePicker::widget([
+                    'model' => $searchModel,
+                    'attribute' => 'datetime',
+                    'type' => DateTimePicker::TYPE_INPUT,
+                    'pluginOptions' => [
+                        'format' => 'dd.mm.yyyy hh:ii'
+                    ]
+                ])
+            ],
+            [
+                'attribute' => 'price',
+                'filter' => Html::activeTextInput($searchModel, 'price', ['type' => 'number'])
+            ],
+            [
+                'attribute' => 'rating',
+                'filter' => [
+                    '0+' => '0+',
+                    '6+' => '6+',
+                    '12+' => '12+',
+                    '16+' => '16+',
+                    '18+' => '18+'
+                ]
+            ],
         ],
     ]); ?>
 </div>

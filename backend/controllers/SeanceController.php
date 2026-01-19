@@ -3,7 +3,8 @@
 namespace backend\controllers;
 
 use common\Models\Seance;
-use yii\data\ActiveDataProvider;
+use common\models\SeanceSearch;
+use Yii;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\AccessControl;
@@ -48,18 +49,12 @@ class SeanceController extends Controller
      */
     public function actionIndex()
     {
-        $dataProvider = new ActiveDataProvider([
-            'query' => Seance::find()->orderBy(['datetime' => SORT_DESC]),
-            /*
-            'pagination' => [
-                'pageSize' => 50
-            ],
-            */
-            'sort' => false,
-        ]);
+        $searchModel = new SeanceSearch();
+        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
         return $this->render('index', [
             'dataProvider' => $dataProvider,
+            'searchModel' => $searchModel
         ]);
     }
 

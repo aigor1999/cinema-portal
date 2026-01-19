@@ -2,9 +2,8 @@
 
 namespace frontend\controllers;
 
-use common\Models\Seance;
+use common\Models\SeanceSearch;
 use Yii;
-use yii\data\ActiveDataProvider;
 use yii\web\Controller;
 use yii\filters\VerbFilter;
 
@@ -47,18 +46,12 @@ class SiteController extends Controller
      */
     public function actionIndex()
     {
-        $dataProvider = new ActiveDataProvider([
-            'query' => Seance::find()->orderBy(['datetime' => SORT_DESC]),
-            /*
-            'pagination' => [
-                'pageSize' => 50
-            ],
-            */
-            'sort' => false,
-        ]);
+        $searchModel = new SeanceSearch();
+        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
         return $this->render('index', [
             'dataProvider' => $dataProvider,
+            'searchModel' => $searchModel
         ]);
     }
 }

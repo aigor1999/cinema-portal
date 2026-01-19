@@ -8,6 +8,7 @@ use yii\grid\GridView;
 
 /** @var yii\web\View $this */
 /** @var yii\data\ActiveDataProvider $dataProvider */
+/** @var Film $searchModel */
 
 $this->title = 'Фильмы';
 $this->params['breadcrumbs'][] = $this->title;
@@ -23,6 +24,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
+        'filterModel' => $searchModel,
         'columns' => [
             ['class' => 'yii\grid\SerialColumn'],
 
@@ -37,9 +39,25 @@ $this->params['breadcrumbs'][] = $this->title;
                     ]);
                 }
             ],
-            'description:ntext',
-            'length',
-            'rating',
+            [
+                'attribute' => 'description',
+                'format' => 'ntext',
+                'filter' => false
+            ],
+            [
+                'attribute' => 'length',
+                'filter' => Html::activeTextInput($searchModel, 'length', ['type' => 'number'])
+            ],
+            [
+                'attribute' => 'rating',
+                'filter' => [
+                    '0+' => '0+',
+                    '6+' => '6+',
+                    '12+' => '12+',
+                    '16+' => '16+',
+                    '18+' => '18+'
+                ]
+            ],
             [
                 'class' => ActionColumn::className(),
                 'urlCreator' => function ($action, Film $model, $key, $index, $column) {
